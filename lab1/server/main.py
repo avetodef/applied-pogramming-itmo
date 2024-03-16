@@ -9,6 +9,7 @@ from .db import get_session, User
 
 app = FastAPI()
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
