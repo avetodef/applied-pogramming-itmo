@@ -15,9 +15,8 @@ class Base(DeclarativeBase):
     pass
 
 
-class User(Base):
+class FileContent(Base):
     __tablename__ = "users"
 
     username: Mapped[str] = mapped_column(String(50), primary_key=True)
     user_password: Mapped[str] = mapped_column(String(50))
-

@@ -1,34 +1,119 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
-<head>
+  <head>
     <title>Main page</title>
-    <link rel = "stylesheet" href = "main-style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="main-style.css" />
+  </head>
+  <body>
+    <div class="file-upload-container">
+      <p>Upload a file to SQL server</p>
+      <form class="sql-form" id="file-form" method="POST">
+        <label for="sql-name">SQL server name</label> <br />
+        <input type="text" id="sql-name" name="sql-name" /> <br />
 
-<div class = "file-upload-container">
-    <p>Upload a file to SQL server</p>
-    <form class = "file-form" id = "file-form" method = "POST">
-        <label for = "file">Upload a file</label> <br>
-        <input type = "file" id = "file" name = "file" value = "Upload" accept = ".csv .txt"> <br>
+        <label for="sql-login">Login</label> <br />
+        <input type="text" id="sql-login" name="sql-login" /> <br />
 
-        <label for = "sql-name">SQL server name</label> <br>
-        <input type = "text" id = "sql-name" name = "sql-name"> <br>
+        <label for="sql-password">Password</label><br />
+        <input type="password" id="sql-password" name="sql-password" /> <br />
 
-        <label for = "sql-login">Login</label> <br>
-        <input type = "text" id = "sql-login" name = "sql-login"> <br>
+        <label for="db-name">Database name</label><br />
+        <input type="text" id="db-name" name="db-name" /> <br />
 
-        <label for = "sql-password">Password</label><br>
-        <input type = "password" id="sql-password" name = "sql-password"> <br>
+        <label for="table-name">Table name</label><br />
+        <input type="text" id="table-name" name="table-name" /> <br />
 
-        <label for = "db-name">Database name</label><br>
-        <input type = "text" id="db-name" name = "db-name"> <br>
+        <input
+          type="submit"
+          id="submit-button"
+          name="submit_button"
+          class="submit_button"
+          value="Connect to db"
+        />
+      </form>
 
-        <label for = "table-name">Table name</label><br>
-        <input type = "text" id="table-name" name = "table-name"> <br>
+      <form class="file-form" id="file-form" method="POST">
+        <label for="file">Upload a file</label> <br />
+        <input
+          type="file"
+          id="file"
+          name="file"
+          value="Upload"
+          accept=".csv .txt"
+        />
+        <br />
 
-        <input type = "submit" id = "submit-button" name="submit_button" class = "submit_button" value = "Export file to db">
-    </form>
-</div>
-</body>
+        <input
+          type="submit"
+          id="file-button"
+          name="submit_button"
+          class="submit_button"
+          value="Export file to db"
+        />
+      </form>
+    </div>
+
+    <script type="application/javascript">
+      const sql_form = document.getElementById("sql-form");
+      const file_form = document.getElementById("file-form");
+
+      const file = document.getElementById("file");
+      const server = document.getElementById("sql-name");
+      const login = document.getElementById("sql-login");
+      const password = document.getElementById("sql-password");
+      const db_name = document.getElementById("db-name");
+      const table_name = document.getElementById("table-name");
+
+      const send = document.getElementById("submit-button");
+      const upload = document.getElementById("file-button");
+
+      send.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const payload = {
+          login: login.value,
+          password: password.value,
+        };
+
+        const response = await fetch("http://127.0.0.1:8000/connect", {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }).then((response) => {
+          if (response.status === 401) {
+            alert("Incorrect username or password");
+          }
+          if (response.status === 200) {
+            alrt("NORM!");
+          }
+        });
+      });
+
+      upload.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const payload = {
+          login: login.value,
+          password: password.value,
+        };
+
+        const response = await fetch("http://127.0.0.1:8000/upload", {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }).then((response) => {
+          if (response.status === 401) {
+            alert("Incorrect username or password");
+          }
+          if (response.status === 200) {
+            alrt("DONE!");
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
