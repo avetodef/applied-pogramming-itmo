@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Authorization</title>
+    <link rel = "stylesheet" href = "auth-style.css">
+
+</head>
+<body>
+<div class = "form-container">
+<h1>Please enter login and password</h1>
+    <form action = "" class = "auth-form" id = "auth-form" method = "POST">
+        <label for = "login">Login</label> <br>
+        <input type = "text" id = "login" name = "login"> <br>
+
+        <label for = "password">Password</label> <br>
+        <input type = "password" id = "password" name = "password"> <br>
+
+        <input type = "submit" id = "submit-button" name="submit_button" class = "submit_button" value = "Authorize">
+    </form>
+</div>
+<script type="application/javascript" >
+const form = document.getElementById('auth-form');
+    const login = document.getElementById('login');
+    const password = document.getElementById('password');
+    const loginSubmit = document.getElementById('submit-button')
+
+    loginSubmit.addEventListener('click', async (e) => {
+       e.preventDefault();
+       const payload = {
+           login: login.value,
+           password: password.value
+       };
+
+       const response = await fetch('http://127.0.0.1:8000/login', {
+           method: 'POST',
+           headers: {
+               'accept': 'application/json',
+               'Content-Type': 'application/json'
+           },
+           body: JSON.stringify(payload)
+       });
+
+        console.log(response);
+    });
+//TODO обработка того что попало и получилось
+</script>
+</body>
+</html>

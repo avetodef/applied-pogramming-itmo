@@ -1,0 +1,41 @@
+body{
+    font-family : Arial;
+    background-color : #f6f6fa;
+}
+p {
+    font-size : 45px;
+    color : #09090f;
+}
+.file-upload-container{
+    display : flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: fit-content;
+    margin : auto;
+    margin-top : 10px;
+}
+
+.file-form{
+    font-size : 20px;
+}
+input{
+    box-sizing: border-box;
+    width: 300px;
+    height : 40px;
+    border: solid;
+    border-width: 2px;
+    border-radius : 10px;
+    margin-bottom: 25px;
+    font-size : 15px;
+}
+.submit_button{
+    width : 307px;
+    background-color : #9795d0;
+    font-size : 25px;
+}
+/*--text: #09090f;*/
+/*--background: #f6f6fa;*/
+/*--primary: #625fb1;*/
+/*--secondary: #9795d0;*/
+/*--accent: #7673c7;*/
