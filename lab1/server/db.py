@@ -5,6 +5,7 @@ DATABASE_URL = "postgresql://postgres:lterm54201@localhost:5432/applied_prog_lab
 engine = create_engine(DATABASE_URL)
 
 
+
 def get_session():
     with Session(engine) as session:
         yield session
