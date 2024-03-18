@@ -1,15 +1,20 @@
-from fastapi import FastAPI, UploadFile, Depends, HTTPException
+from fastapi import FastAPI, UploadFile, Depends, HTTPException, File
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from starlette import status
 from pydantic import BaseModel
-from starlette.responses import Response
+from starlette.requests import Request
+from starlette.responses import Response, HTMLResponse
+from fastapi.templating import Jinja2Templates
+import csv
+import codecs
 
-from db import get_session, User
+from db import get_session, User, FileContent
+from file_db import create_custom_session
 
 app = FastAPI()
-
+templates = Jinja2Templates(directory="templates")
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,19 +30,17 @@ class LoginData(BaseModel):
     password: str
 
 
-class SQLConnectData(BaseModel):
-    server = str
-    login = str
-    password = str
-    db_name = str
-    table_name = str
+class Base(BaseModel):
+    server: str
+    login: str
+    password: str
+    db_name: str
+    table_name: str
 
-#class File ???????
 
-@app.post('/upload', status_code=status.HTTP_200_OK)
-def upload_file(file: UploadFile):
-    print(file.file.read())
-    return file.filename
+@app.get("/", response_class=HTMLResponse)
+def main(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/register")
@@ -62,3 +65,34 @@ def login(data: LoginData, session: Session = Depends(get_session)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     return Response(status_code=status.HTTP_200_OK)
+
+
+#СУКА КАК ЭТО ДЕЛАТЬ Я НЕ ПОНИМАЮ НАХ
+@app.post('/upload')
+def upload_file(server: str, server_login: str, password: str, db_name: str, table_name: str, file: UploadFile, Session = Depends(get_session)):
+    url = server + "://" + server_login + ":" + password + "@localhost:5432/" + db_name
+    DATABASE = "postgresql://postgres:lterm54201@localhost:5432/applied_prog_lab_1"
+    print(url)
+    print(DATABASE)
+    if url != DATABASE:
+        print("WTF")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT)
+
+    # Session = Depends(create_custom_session(server, server_login, password, db_name, table_name))
+    # if not Session:
+    #     raise HTTPException(status_code=status.HTTP_409_CONFLICT)
+
+    print(csvToJSON(file))
+
+    return Response(status_code=status.HTTP_200_OK)
+
+
+def csvToJSON(file):
+    csvReader = csv.DictReader(codecs.iterdecode(file.file, 'utf-8'))
+    data = {}
+    for rows in csvReader:
+        key = rows['create_date', 'create_time']
+        data[key] = rows
+
+    file.file.close()
+    return data
