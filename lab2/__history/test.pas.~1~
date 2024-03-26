@@ -1,0 +1,84 @@
+unit test;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm2 = class(TForm)
+    Label1: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    Edit6: TEdit;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+
+implementation
+
+{$R *.dfm}
+
+function F(x, y: Double): Double;
+begin
+  Result := x - y; // уравнение для пункта (б)
+end;
+
+function FindRoot(a, b, eps, y: Double): Double;
+begin
+  repeat
+    Result := (a + b) / 2;
+    if F(a, y) * F(Result, y) < 0 then
+      b := Result
+    else
+      a := Result;
+  until abs(b - a) < eps;
+end;
+
+
+procedure TForm2.Button1Click(Sender: TObject);
+var
+  a, b, eps, y: Double;
+  resultRoot: Double;
+begin
+  WriteLn('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
+  a := -20;
+  b := 30;
+  y := 13.5;
+  eps := StrToFloat(Edit1.Text);
+
+  resultRoot := FindRoot(a, b, eps, y);
+  Edit6.Text := FormatFloat('0.000000', resultRoot);
+
+end;
+
+procedure TForm2.Button2Click(Sender: TObject);
+var
+  a, b, eps, y: Double;
+  resultRoot: Double;
+begin
+  ShowMessage('AAAAAAAAAAAAAAAAAAAAAAAA');
+  a := StrToFloat(Edit2.Text);
+  b := StrToFloat(Edit3.Text);
+  y := StrToFloat(Edit4.Text);
+  eps := StrToFloat(Edit5.Text);
+
+  resultRoot := FindRoot(a, b, eps, y);
+  ShowMessage('Root for part a: ' + FormatFloat('0.000000', resultRoot));
+end;
+
+end.
+
