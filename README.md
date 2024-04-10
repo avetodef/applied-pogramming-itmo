@@ -1,1 +1,1 @@
-#Applied programmnig ITMO ICT
+Applied programmnig ITMO ICT
